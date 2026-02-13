@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Sede {
+  id          String      @id @default(cuid())
+  nombre      String
+  direccion   String?
+  psicologos  Psicologo[]
+  citas       Cita[]
+}
+
+model Psicologo {
+  id               String   @id @default(cuid())
+  nombre           String
+  apellido         String
+  email            String   @unique
+  googleCalendarId String?
+  sedeId           String
+  sede             Sede     @relation(fields: [sedeId], references: [id])
+  citas            Cita[]
+}
+
+model Paciente {
+  id       String @id @default(cuid())
+  nombre   String
+  apellido String
+  citas    Cita[]
+}
+
+model Cita {
+  id           String    @id @default(cuid())
+  fecha        DateTime
+  horaInicio   DateTime
+  psicologoId  String
+  psicologo    Psicologo @relation(fields: [psicologoId], references: [id])
+  pacienteId   String
+  paciente     Paciente  @relation(fields: [pacienteId], references: [id])
+  sedeId       String
+  sede         Sede      @relation(fields: [sedeId], references: [id])
+  estado       String    @default("pendiente") // pendiente, pagada, cancelada, atendida
+  box          Int?
+  paymentId    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model LlamadaActual {
+  id        String  @id @default("unica")
+  citaId    String?
+  cita      Cita?   @relation(fields: [citaId], references: [id])
+  updatedAt DateTime @updatedAt
+}
