@@ -1,18 +1,22 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  // NO coloques url aquí → se maneja en prisma.config.ts
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  
-}
-
 model Sede {
-  id          String      @id @default(cuid())
-  nombre      String
-  direccion   String?
-  psicologos  Psicologo[]
-  citas       Cita[]
+  id         String      @id @default(cuid())
+  nombre     String
+  direccion  String?
+  psicologos Psicologo[]
+  citas      Cita[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 model Psicologo {
@@ -20,39 +24,49 @@ model Psicologo {
   nombre           String
   apellido         String
   email            String   @unique
-  googleCalendarId String?
+  googleCalendarId String? // ID del calendario de Google del psicólogo
   sedeId           String
   sede             Sede     @relation(fields: [sedeId], references: [id])
   citas            Cita[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Paciente {
-  id       String @id @default(cuid())
-  nombre   String
-  apellido String
-  citas    Cita[]
+  id        String   @id @default(cuid())
+  nombre    String
+  apellido  String
+  email     String?
+  telefono  String?
+  citas     Cita[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Cita {
-  id           String    @id @default(cuid())
-  fecha        DateTime
-  horaInicio   DateTime
-  psicologoId  String
-  psicologo    Psicologo @relation(fields: [psicologoId], references: [id])
-  pacienteId   String
-  paciente     Paciente  @relation(fields: [pacienteId], references: [id])
-  sedeId       String
-  sede         Sede      @relation(fields: [sedeId], references: [id])
-  estado       String    @default("pendiente") // pendiente, pagada, cancelada, atendida
-  box          Int?
-  paymentId    String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id          String    @id @default(cuid())
+  fecha       DateTime
+  horaInicio  DateTime
+  duracionMin Int       @default(30)
+  psicologoId String
+  psicologo   Psicologo @relation(fields: [psicologoId], references: [id])
+  pacienteId  String
+  paciente    Paciente  @relation(fields: [pacienteId], references: [id])
+  sedeId      String
+  sede        Sede      @relation(fields: [sedeId], references: [id])
+  estado      String    @default("pendiente") // pendiente, pagada, cancelada, atendida, no_asistio
+  box         Int?
+  paymentId   String? // ID de Flow o la pasarela
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relación inversa con LlamadaActual (uno a uno)
+  llamadaActual LlamadaActual?
 }
 
 model LlamadaActual {
-  id        String  @id @default("unica")
-  citaId    String?
-  cita      Cita?   @relation(fields: [citaId], references: [id])
+  id        String   @id @default("unica") // solo una fila activa a la vez
+  citaId    String?  @unique
+  cita      Cita?    @relation(fields: [citaId], references: [id])
   updatedAt DateTime @updatedAt
 }
