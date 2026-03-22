@@ -92,9 +92,9 @@ export default function MonitorPage() {
       {/* HEADER */}
       <header className="flex justify-between items-center border-b-2 border-gray-800 pb-6 mb-8">
         <div>
-          <h1 className="text-5xl font-black text-blue-500 uppercase tracking-tighter">
-            {sede?.nombre || "CONSTRUCTIVAMENTE"}
-          </h1>
+         <h1 className="text-5xl font-black text-blue-500 uppercase tracking-tighter">
+          CONSTRUCTIVAMENTE
+        </h1>
           <p className="text-xl text-gray-500 font-bold tracking-[0.3em]">SALA DE ESPERA</p>
         </div>
         <div className="text-right">
