@@ -9,22 +9,22 @@ export default function Home() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
-          {/* Botón Nueva Reserva - Apunta a la carpeta 'dashboard' o 'reservas/nueva' */}
+          {/* Botón Nueva Reserva -> Redirige a Sedes */}
           <Link 
-            href="/dashboard" 
-            className="p-6 border rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all group"
+            href="/sedes" 
+            className="p-6 border rounded-lg hover:border-green-500 hover:bg-green-50 transition-all group"
           >
-            <h2 className="text-2xl font-semibold mb-2 group-hover:text-blue-600">Nueva Reserva</h2>
-            <p className="text-gray-600">Crear una nueva reserva</p>
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-green-600">Nueva Reserva</h2>
+            <p className="text-gray-600">Crear una nueva reserva seleccionando una sede</p>
           </Link>
           
-          {/* Botón Ver Reservas - Apunta a la carpeta 'reservas' o 'display' */}
+          {/* Botón Ver Reservas -> También redirige a Sedes */}
           <Link 
-            href="/display" 
+            href="/sedes" 
             className="p-6 border rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all group"
           >
             <h2 className="text-2xl font-semibold mb-2 group-hover:text-blue-600">Ver Reservas</h2>
-            <p className="text-gray-600">Consultar reservas existentes</p>
+            <p className="text-gray-600">Consultar reservas existentes por sede</p>
           </Link>
 
         </div>
